@@ -5,6 +5,8 @@ A Django/Python web application to make editing and testing B1if XSL and XML fas
 
 This is a work in progress, considered unstable alpha.
 
+![Biffy in action](/../screenshots/screens/BiffyScreen.jpg?raw=true "Biffy in action")
+
 ####Todo
 * Improve UI
 * Save file function
