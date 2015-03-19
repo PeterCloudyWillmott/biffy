@@ -4,8 +4,8 @@ from django.db import models
 
 class B1if(models.Model):
 	server		= models.CharField(max_length=100)
-	path		= models.CharField(max_length=300)
-	port		= models.CharField(max_length=8)
+	path		= models.CharField(max_length=300,default='/B1iXcellerator/exec/webdav/com.sap.b1i.vplatform.scenarios.design/')
+	port		= models.CharField(max_length=8,default='8080')
 	user		= models.CharField(max_length=24)
 	password	= models.CharField(max_length=24)
 	def __unicode__(self):
