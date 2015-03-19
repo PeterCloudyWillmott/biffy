@@ -19,7 +19,7 @@ $(function() {
     e.preventDefault();
     if($(this).val()==='')
       return false;
-    $.post('/floweditor/getScenarioFiles/',$('#fileform').serialize(),function(data) {
+    $.post('/floweditor/getScenarioFlows/',$('#fileform').serialize(),function(data) {
       if(data.flows.length>0) {
         var select = $('select[name="flow"]');
         select.html("<option value=''>-------</option>");
@@ -47,9 +47,19 @@ $(function() {
 
   $(document.body).on('click','#file_list li a', function(e) {
     e.preventDefault();
+    document.current_file = $(this).text();
+    $('#filename').text($(this).text());
     $.post('/floweditor/getFlowFileContent/',$('#fileform').serialize()+'&file='+$(this).text() ,function(data) {
-      //$('#filecontent').html(data.file_content);
+      $('#filecontent').html(data.file_content);
       document.editor.setValue(data.file_content);
+    },'json');
+  });
+
+  $(document.body).on('click','#save_file', function(e) {
+    e.preventDefault();
+    var new_content = document.editor.getValue();
+    $.post('/floweditor/saveFlowFileContent/',$('#fileform').serialize()+'&file='+document.current_file+'&file_content='+encodeURIComponent(new_content) ,function(data) {
+      //$('#filecontent').html(data.file_content);
     },'json');
   });
 

@@ -52,6 +52,7 @@ class OperationFailed(WebdavException):
         DELETE = "delete",
         MKCOL = "create directory",
         PROPFIND = "list directory",
+        MOVE = "move file",
         )
 
     def __init__(self, method, path, expected_code, actual_code):
@@ -95,6 +96,7 @@ class Client(object):
     def _send(self, method, path, expected_code, **kwargs):
         url = self._get_url(path)
         response = self.session.request(method, url, allow_redirects=False, **kwargs)
+        #print response.request.raw
         if isinstance(expected_code, Number) and response.status_code != expected_code \
             or not isinstance(expected_code, Number) and response.status_code not in expected_code:
             raise OperationFailed(method, path, expected_code, response.status_code)
@@ -149,6 +151,9 @@ class Client(object):
     def delete(self, path):
         self._send('DELETE', path, 204)
 
+    def move(self, path, new_path):
+        self._send('MOVE', path, 204,headers={"Destination":new_path,'Connection':'TE','TE':'trailers','Overwrite':'T'})
+
     def upload(self, local_path_or_fileobj, remote_path):
         if isinstance(local_path_or_fileobj, basestring):
             with open(local_path_or_fileobj, 'rb') as f:
@@ -170,13 +175,6 @@ class Client(object):
     def _download(self, fileobj, response):
         for chunk in response.iter_content(DOWNLOAD_CHUNK_SIZE_BYTES):
             fileobj.write(chunk)
-
-    def read(self, remote_path):
-        response = self._send('GET', remote_path, 200, stream=True)
-        file_content = "";
-        for chunk in response.iter_content(DOWNLOAD_CHUNK_SIZE_BYTES):
-            file_content += chunk
-        return file_content
 
     def ls(self, remote_path='.'):
         headers = {'Depth': '1'}

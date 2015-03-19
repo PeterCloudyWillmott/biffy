@@ -6,6 +6,8 @@
                 <!--Sidebar-->
                 <div id="sidebar-wrapper">
                   <form role="form" id="fileform" method="POST">
+                    <h1>Biffy</h1>
+                    <p><i>The missing B1if editor</i></p>
                     {% csrf_token %}
                     <div class="form-group">
                       <label for="email">Server</label>
@@ -40,7 +42,8 @@
                   <div class="container-fluid">
                     <div class="row">
                       <div class="col-lg-12">
-                        <h1>Select a file on the left</h1>
+                        <h3 id="filename">Select File To Edit</h3>
+                        <div class="toolbar"><button name="save_file" id="save_file">Save File</button></div>
                         <textarea style="width:90%;height:700px;position:relative;" id="filecontent">
                         </textarea>
 

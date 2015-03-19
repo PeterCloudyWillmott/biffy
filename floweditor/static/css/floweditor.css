@@ -127,3 +127,14 @@
   border: 1px solid #eee;
   height: auto;
 }
+#sidebar-wrapper form {
+  margin: 15px;
+  color: white;
+}
+#file_list {
+  list-style:none;
+  color:#AAF;
+}
+.toolbar {
+  margin:15px 0;
+}
