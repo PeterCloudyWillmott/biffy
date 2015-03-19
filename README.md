@@ -9,7 +9,6 @@ This is a work in progress, considered unstable alpha.
 
 ####Todo
 * Improve UI
-* Save file function
 * Save file version history
 * Password protect the whole app
 * Test XSLT in browser against local changes
@@ -25,6 +24,7 @@ This is a work in progress, considered unstable alpha.
 * List Files
 * Show file contents
 * Makup XML content
+* Save file function
 
 #### Install
 
