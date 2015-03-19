@@ -1,0 +1,51 @@
+{% extends "site/generic_base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+              <div id="wrapper">
+                <!--Sidebar-->
+                <div id="sidebar-wrapper">
+                  <form role="form" id="fileform" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="email">Server</label>
+                      <select class="form-control" name="server" id="select-server">
+<option>-------</option>
+    {% for server in b1if_servers %}
+   <option value="{{server.id}}"
+       {% if server == current_serv %}selected="selected"{% endif %}>
+       {{server.server}}
+   </option>
+{% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="email">Scenario</label>
+                      <select class="form-control" name="scenario" id="select-scenario">
+
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="email">Flow</label>
+                      <select class="form-control" name="flow" id="select-flow">
+
+                      </select>
+                    </div>
+                  </form>
+                  <ul id="file_list"></ul>
+                </div>
+                <!--/#sidebar-wrapper-->
+                <!--Page Content-->
+                <div id="page-content-wrapper">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <h1>Select a file on the left</h1>
+                        <textarea style="width:90%;height:700px;position:relative;" id="filecontent">
+                        </textarea>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+{% endblock %}
