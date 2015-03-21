@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from floweditor.models import B1if
 from easywebdavbiffy import *
 import xmltodict
-import cStringIO
+import StringIO
 
 # Renders work area, hands over list of b1if servers
 def index(request):
@@ -33,7 +33,7 @@ def getScenarioFlows(request):
 	b1if_server = B1if.objects.get(id=request.POST['server'])
 	webdav = ewdconnect(b1if_server.server, port=b1if_server.port, username=b1if_server.user, password=b1if_server.password)
 	path = b1if_server.path+request.POST['scenario']+'/vPac.xml'
-	virtual_file = cStringIO.StringIO()
+	virtual_file = StringIO.StringIO()
 	webdav.download(path,virtual_file)
 	file_contents = virtual_file.getvalue()
 	flows = []
@@ -60,7 +60,7 @@ def getFlowFileContent(request):
 	b1if_server = B1if.objects.get(id=request.POST['server'])
 	webdav = ewdconnect(b1if_server.server, port=b1if_server.port, username=b1if_server.user, password=b1if_server.password)
 	path = b1if_server.path+'vBIU.'+request.POST['flow']+'/'+request.POST['file']
-	virtual_file = cStringIO.StringIO()
+	virtual_file = StringIO.StringIO()
 	webdav.download(path,virtual_file)
 	return JsonResponse({'file_content':virtual_file.getvalue(),'path':path})
 
@@ -76,13 +76,13 @@ def saveFlowFileContent(request):
 	b1if_server = B1if.objects.get(id=request.POST['server'])
 	webdav = ewdconnect(b1if_server.server, port=b1if_server.port, username=b1if_server.user, password=b1if_server.password)
 	path = b1if_server.path+'vBIU.'+request.POST['flow']+'/'+request.POST['file']
+	temp_path = b1if_server.path+'vBIU.'+request.POST['flow']+'/floweditor.'+request.POST['file']
 	new_file_content = request.POST['file_content']
-	temp_path = path+".floweditor.xml"
 
 	if webdav.exists(temp_path)==True:
 		webdav.delete(temp_path)
 
-	virtual_file = cStringIO.StringIO()
+	virtual_file = StringIO.StringIO()
 	virtual_file.write(new_file_content)
 
 	webdav.upload(virtual_file,temp_path)
