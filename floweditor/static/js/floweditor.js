@@ -15,7 +15,6 @@ $(function() {
   });
 
   $('#select-scenario').on('change', function(e) {
-
     e.preventDefault();
     if($(this).val()==='')
       return false;
@@ -53,6 +52,14 @@ $(function() {
       $('#filecontent').html(data.file_content);
       document.editor.setValue(data.file_content);
     },'json');
+  });
+
+  $(document.body).on('click','.downloadScenario',function(e) {
+    e.preventDefault();
+    $('#fileform').attr('action','/floweditor/downloadScenarioZip/');
+    $('#fileform').attr('target','_blank');
+    $('#fileform').submit();
+
   });
 
   $(document.body).on('click','#save_file', function(e) {

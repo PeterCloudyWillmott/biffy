@@ -127,9 +127,9 @@
   border: 1px solid #eee;
   height: auto;
 }
-#sidebar-wrapper form {
-  margin: 15px;
+#sidebar-wrapper .form{
   color: white;
+  margin: 15px;
 }
 #file_list {
   list-style:none;

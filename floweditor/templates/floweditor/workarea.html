@@ -1,54 +1,50 @@
 {% extends "site/generic_base.html" %}
 {% load widget_tweaks %}
-
 {% block content %}
-              <div id="wrapper">
-                <!--Sidebar-->
-                <div id="sidebar-wrapper">
-                  <form role="form" id="fileform" method="POST">
-                    <h1>Biffy</h1>
-                    <p><i>The missing B1if editor</i></p>
-                    {% csrf_token %}
-                    <div class="form-group">
-                      <label for="email">Server</label>
-                      <select class="form-control" name="server" id="select-server">
-<option>-------</option>
-    {% for server in b1if_servers %}
-   <option value="{{server.id}}"
-       {% if server == current_serv %}selected="selected"{% endif %}>
-       {{server.server}}
-   </option>
-{% endfor %}
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label for="email">Scenario</label>
-                      <select class="form-control" name="scenario" id="select-scenario">
-
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label for="email">Flow</label>
-                      <select class="form-control" name="flow" id="select-flow">
-
-                      </select>
-                    </div>
-                  </form>
-                  <ul id="file_list"></ul>
-                </div>
-                <!--/#sidebar-wrapper-->
-                <!--Page Content-->
-                <div id="page-content-wrapper">
-                  <div class="container-fluid">
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <h3 id="filename">Select File To Edit</h3>
-                        <div class="toolbar"><button name="save_file" id="save_file">Save File</button></div>
-                        <textarea style="width:90%;height:700px;position:relative;" id="filecontent">
-                        </textarea>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
+<div id="wrapper">
+  <!--Sidebar-->
+  <div id="sidebar-wrapper">
+    <form role="form" id="fileform" method="POST" class="form">
+      <h1>Biffy</h1>
+      <p>
+        <i>The missing B1if editor</i>
+      </p>{% csrf_token %}
+      <div class="form-group">
+        <label for="server">Server</label>
+        <select class="form-control" name="server" id="select-server">
+          <option>-------</option>{% for server in b1if_servers %}
+          <option value="{{server.id}}"
+       {% if server == current_serv %}selected="selected"{% endif %}>{{server.server}}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="scenario">Scenario</label>
+        <select class="form-control" name="scenario" id="select-scenario"></select>
+        <a class="downloadScenario">download</a>
+      </div>
+      <div class="form-group">
+        <label for="flow">Flow</label>
+        <select class="form-control" name="flow" id="select-flow"></select>
+      </div>
+    </form>
+    <ul id="file_list"></ul>
+      <p>
+        <a href="/accounts/logout/">Logout</a>
+      </p>
+  </div>
+  <!--/#sidebar-wrapper-->
+  <!--Page Content-->
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <h3 id="filename">Select File To Edit</h3>
+          <div class="toolbar">
+            <button name="save_file" id="save_file">Save File</button>
+          </div>
+          <textarea style="width:90%;height:700px;position:relative;" id="filecontent"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
