@@ -7,6 +7,7 @@ from easywebdavbiffy import *
 import xmltodict
 import StringIO
 from zipfile import ZipFile
+from xml.dom.minidom import parseString
 
 # Renders work area, hands over list of b1if servers
 @login_required
@@ -144,3 +145,13 @@ def downloadScenarioZip(request):
 	response['Content-Disposition'] = 'attachment; filename=%s.zip' %(scenario)
 	response['Content-Type'] = 'application/x-zip'
 	return response
+
+
+@login_required
+def formatXML(request):
+	input_xml = request.POST['xml']
+	error = []
+	#xmlDom = xml.dom.minidom.parseString(input_xml)
+	formatted_xml = '\n'.join([line for line in parseString(input_xml).toprettyxml(indent=' '*2).split('\n') if line.strip()])
+	#formatted_xml = lambda formatted_xml: '\n'.join([line for line in parseString(formatted_xml).toprettyxml(indent=' '*2).split('\n') if line.strip()])
+	return JsonResponse({'formatted_xml':formatted_xml,'error':error})

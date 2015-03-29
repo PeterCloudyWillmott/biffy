@@ -70,6 +70,23 @@ $(function() {
     },'json');
   });
 
+  $(document.body).on('click','#formatXML', function(e) {
+    e.preventDefault();
+    var new_content = document.editor.getValue();
+    $.post('/floweditor/formatXML/',$('#fileform').serialize()+'&xml='+encodeURIComponent(new_content) ,function(data) {
+      $('#filecontent').html(data.formatted_xml);
+      document.editor.setValue(data.formatted_xml);
+    },'json');
+  });
+
+  $(document.body).on('click','#reload_file', function(e) {
+    e.preventDefault();
+    $.post('/floweditor/getFlowFileContent/',$('#fileform').serialize()+'&file='+document.current_file ,function(data) {
+      $('#filecontent').html(data.file_content);
+      document.editor.setValue(data.file_content);
+    },'json');
+  });
+
   document.editor = CodeMirror.fromTextArea($('#filecontent')[0], {
     lineNumbers: true,
     mode: {name:"xml",htmlMode: false},
