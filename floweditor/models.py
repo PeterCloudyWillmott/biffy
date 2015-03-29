@@ -10,7 +10,7 @@ class B1if(models.Model):
 	user		= models.CharField(max_length=24)
 	password	= models.CharField(max_length=24)
 	def __unicode__(self):
-		return self.server
+		return self.name+" ("+self.server+")"
 
 class B1file(models.Model):
 	contents	= models.TextField()
