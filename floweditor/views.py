@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.contrib.auth.decorators import login_required
 from floweditor.models import B1if
 from easywebdavbiffy import *
@@ -12,7 +12,8 @@ from xml.dom.minidom import parseString
 # Renders work area, hands over list of b1if servers
 @login_required
 def index(request):
-	b1if_servers = B1if.objects.order_by('server')
+	account_id = request.user.biffyuser.account.id
+	b1if_servers = B1if.objects.filter(account_id=account_id).order_by('name')
 
 	context = {
 		'b1if_servers': b1if_servers
@@ -23,6 +24,8 @@ def index(request):
 @login_required
 def getScenarios(request):
 	b1if_server = B1if.objects.get(id=request.POST['server'])
+	if(b1if_server.account != request.user.biffyuser.account):
+		return HttpResponseNotFound();
 	#b1if_server = B1if.objects.get(id=1)
 	webdav = ewdconnect(b1if_server.server, port=b1if_server.port, username=b1if_server.user, password=b1if_server.password)
 	#print b1if_server.server+":"+b1if_server.port
@@ -39,6 +42,8 @@ def getScenarios(request):
 @login_required
 def getScenarioFlows(request):
 	b1if_server = B1if.objects.get(id=request.POST['server'])
+	if(b1if_server.account != request.user.biffyuser.account):
+		return HttpResponseNotFound();
 	webdav = ewdconnect(b1if_server.server, port=b1if_server.port, username=b1if_server.user, password=b1if_server.password)
 	path = b1if_server.path+request.POST['scenario']+'/vPac.xml'
 	virtual_file = StringIO.StringIO()
@@ -55,6 +60,8 @@ def getScenarioFlows(request):
 @login_required
 def getFlowFiles(request):
 	b1if_server = B1if.objects.get(id=request.POST['server'])
+	if(b1if_server.account != request.user.biffyuser.account):
+		return HttpResponseNotFound();
 	webdav = ewdconnect(b1if_server.server, port=b1if_server.port, username=b1if_server.user, password=b1if_server.password)
 	path = b1if_server.path+'vBIU.'+request.POST['flow']
 	folders = webdav.ls(path)
@@ -68,6 +75,8 @@ def getFlowFiles(request):
 @login_required
 def getFlowFileContent(request):
 	b1if_server = B1if.objects.get(id=request.POST['server'])
+	if(b1if_server.account != request.user.biffyuser.account):
+		return HttpResponseNotFound();
 	webdav = ewdconnect(b1if_server.server, port=b1if_server.port, username=b1if_server.user, password=b1if_server.password)
 	path = b1if_server.path+'vBIU.'+request.POST['flow']+'/'+request.POST['file']
 	virtual_file = StringIO.StringIO()
@@ -85,6 +94,8 @@ def getFlowFileContent(request):
 @login_required
 def saveFlowFileContent(request):
 	b1if_server = B1if.objects.get(id=request.POST['server'])
+	if(b1if_server.account != request.user.biffyuser.account):
+		return HttpResponseNotFound();
 	webdav = ewdconnect(b1if_server.server, port=b1if_server.port, username=b1if_server.user, password=b1if_server.password)
 	path = b1if_server.path+'vBIU.'+request.POST['flow']+'/'+request.POST['file']
 	temp_path = b1if_server.path+'vBIU.'+request.POST['flow']+'/floweditor.'+request.POST['file']
@@ -107,6 +118,8 @@ def saveFlowFileContent(request):
 @login_required
 def downloadScenarioZip(request):
 	b1if_server = B1if.objects.get(id=request.POST['server'])
+	if(b1if_server.account != request.user.biffyuser.account):
+		return HttpResponseNotFound();
 	scenario = request.POST['scenario']
 
 	webdav = ewdconnect(b1if_server.server, port=b1if_server.port, username=b1if_server.user, password=b1if_server.password)
